@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f0f2f5;
+}
+
+.card {
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.header {
+    text-align: center;
+}
+
+.formItem {
+    margin-bottom: 16px;
+}
+
+.submitButton {
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+}
+
+.loginLink {
+    color: #1890ff;
+}
