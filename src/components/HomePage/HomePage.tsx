@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { getTrendingMovies } from "../../api";
-import { Row, Col, Typography, Spin } from 'antd';
-import FilmCard from "../FilmCard/FilmCard";
+import { Row, Col, Typography, Spin, Pagination } from "antd";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+import FilmCard from "../FilmCard/FilmCard";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Title } = Typography;
 
 const HomePage = () => {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const { pageId } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,14 +20,36 @@ const HomePage = () => {
                 navigate("/login");
             }
         });
+        return () => unsubscribe();
+    }, [navigate]);
 
-        getTrendingMovies().then((data) => {
+    useEffect(() => {
+        if (pageId) {
+            const parsed = Number(pageId);
+            if (isNaN(parsed)) {
+                navigate("*");
+            } else {
+                setCurrentPage(parsed);
+            }
+        }
+    }, [pageId, navigate]);
+
+    useEffect(() => {
+        setLoading(true);
+        getTrendingMovies(currentPage).then((data) => {
             setMovies(data);
             setLoading(false);
         });
+    }, [currentPage]);
 
-        return () => unsubscribe();
-    }, [navigate]);
+    const handlePageChange = (page: number) => {
+        navigate(`/page/${page}`);
+        setCurrentPage(page);
+    };
+
+    const handleMovieClick = (movieId: string) => {
+        navigate(`/movie/${movieId}`);
+    };
 
     if (loading) {
         return (
@@ -37,14 +61,24 @@ const HomePage = () => {
 
     return (
         <div style={{ padding: '24px' }}>
-            <Title level={2} style={{ marginBottom: '24px' }}>Trending Movies</Title>
+            <Title level={2} style={{ marginBottom: '24px' }}>All Movies</Title>
             <Row gutter={[24, 24]}>
                 {movies.map((movie) => (
                     <Col xs={24} sm={12} md={8} lg={6} key={movie.id}>
-                        <FilmCard movie={movie} />
+                        <FilmCard movie={movie} onClick={() => handleMovieClick(movie.id)} />
                     </Col>
                 ))}
             </Row>
+            <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                <Pagination
+                    current={currentPage}
+                    total={50 * 20}
+                    pageSize={20}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    style={{ display: 'inline-block' }}
+                />
+            </div>
         </div>
     );
 };

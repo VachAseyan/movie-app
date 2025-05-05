@@ -1,108 +1,167 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { Form, Input, Button, Card, Typography, Space, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppDispatch } from "../../app/hooks";
-import { login } from "../../features/auth/authSlice";
+import { Form, Input, Button, Card, Typography, Space, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { login } from '../../features/auth/authSlice';
+import { auth } from '../../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect } from 'react';
 
 const { Title, Text } = Typography;
 
-const schema = yup.object().shape({
-    email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup.string().required("Password is required"),
-});
-
 const LoginPage = () => {
-
-    const dispatch = useAppDispatch();
-    const {
-        control,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm({
-        resolver: yupResolver(schema),
-    });
-
+    const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const [messageApi, contextHolder] = message.useMessage();
 
-
-    const onSubmit = async (data) => {
+    const onFinish = async (values: { email: string; password: string }) => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-            dispatch(login());
-            message.success("Login successful! Redirecting to home...");
-            setTimeout(() => navigate("/home"), 1000);
-        } catch (error) {
-            message.error(error.message);
+            const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+            if (userCredential.user ) {
+                dispatch(login({ user: userCredential.user }));
+                messageApi.success('Successfully logged in!');
+                setTimeout(() => navigate('/'), 2000);
+            }
+        } catch (error: any) {
+            messageApi.error('Failed to login. Please try again.');
         }
     };
 
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/');
+        }
+    }, []);
+
     return (
-        <div style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}>
-            <Card>
-                <Space direction="vertical" size="large" style={{ width: "100%" }}>
-                    <div style={{ textAlign: "center" }}>
-                        <Title level={2}>Welcome Back</Title>
-                        <Text type="secondary">Please login to your account</Text>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            background: '#141414',
+            padding: '20px'
+        }}>
+            {contextHolder}
+            <Card
+                style={{
+                    width: '100%',
+                    maxWidth: '450px',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+                    border: 'none',
+                    overflow: 'hidden',
+                    background: '#1f1f1f'
+                }}
+                bodyStyle={{ padding: '40px' }}
+            >
+                <Space
+                    direction="vertical"
+                    size="large"
+                    style={{
+                        width: "100%",
+                        textAlign: 'center'
+                    }}
+                >
+                    <div>
+                        <Title level={2} style={{ color: '#177ddc', marginBottom: '8px' }}>Welcome Back</Title>
+                        <Text style={{ color: '#8c8c8c', fontSize: '16px' }}>Sign in to continue</Text>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <Form
+                        name="login"
+                        onFinish={onFinish}
+                        layout="vertical"
+                        requiredMark={false}
+                    >
                         <Form.Item
-                            validateStatus={errors.email ? "error" : ""}
-                            help={errors.email?.message}
+                            name="email"
+                            rules={[
+                                { required: true, message: 'Please input your email!' },
+                                { type: 'email', message: 'Please enter a valid email!' }
+                            ]}
+                            style={{ marginBottom: '24px' }}
                         >
-                            <Controller
-                                name="email"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        prefix={<UserOutlined />}
-                                        placeholder="Email"
-                                    />
-                                )}
+                            <Input
+                                prefix={<UserOutlined style={{ color: '#8c8c8c' }} />}
+                                placeholder="Email"
+                                size="large"
+                                style={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                    borderRadius: '6px',
+                                    padding: '10px 15px',
+                                    height: '48px',
+                                    border: '1px solid #303030'
+                                }}
+                                className="dark-input"
                             />
                         </Form.Item>
 
                         <Form.Item
-                            validateStatus={errors.password ? "error" : ""}
-                            help={errors.password?.message}
+                            name="password"
+                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            style={{ marginBottom: '24px' }}
                         >
-                            <Controller
-                                name="password"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input.Password
-                                        {...field}
-                                        prefix={<LockOutlined />}
-                                        placeholder="Password"
-                                    />
-                                )}
+                            <Input.Password
+                                prefix={<LockOutlined style={{ color: '#8c8c8c' }} />}
+                                placeholder="Password"
+                                size="large"
+                                style={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                    borderRadius: '6px',
+                                    padding: '10px 15px',
+                                    height: '48px',
+                                    border: '1px solid #303030'
+                                }}
+                                className="dark-input"
                             />
                         </Form.Item>
 
-                        <Form.Item>
+                        <Form.Item style={{ marginBottom: '16px' }}>
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                                loading={isSubmitting}
+                                size="large"
                                 block
+                                style={{
+                                    height: '48px',
+                                    borderRadius: '6px',
+                                    fontSize: '16px',
+                                    fontWeight: '500',
+                                    background: '#177ddc',
+                                    border: 'none',
+                                    boxShadow: '0 4px 12px rgba(23, 125, 220, 0.3)',
+                                    transition: 'all 0.3s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = '#1890ff'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = '#177ddc'}
                             >
                                 Log in
                             </Button>
                         </Form.Item>
 
-                        <div style={{ textAlign: "center" }}>
-                            <Text type="secondary">
+                        <div style={{ textAlign: "center", marginTop: '24px' }}>
+                            <Text style={{ color: '#8c8c8c', fontSize: '14px' }}>
                                 Don't have an account?{" "}
-                                <NavLink to="/register">Register</NavLink>
+                                <NavLink
+                                    to="/register"
+                                    style={{
+                                        color: '#177ddc',
+                                        fontWeight: '500',
+                                        textDecoration: 'none',
+                                        transition: 'color 0.3s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.color = '#1890ff'}
+                                    onMouseLeave={(e) => e.currentTarget.style.color = '#177ddc'}
+                                >
+                                    Register now!
+                                </NavLink>
                             </Text>
                         </div>
-                    </form>
+                    </Form>
                 </Space>
             </Card>
         </div>

@@ -1,24 +1,27 @@
 import { createAppSlice } from "../../app/createAppSlice"
 
-interface AuthState {
-    isLoggedIn: boolean
-}
 
-const initialState: AuthState = {
-    isLoggedIn: false,
+const initialState = {
+    isLoggedIn: localStorage.getItem("user") ? true : false,
+    user: JSON.parse(localStorage.getItem("user") || "null"),
 }
 
 const authSlice = createAppSlice({
     name: "auth",
     initialState,
-    reducers: {
-        login: state => {
+    reducers: create => ({
+        login: create.reducer((state, action) => {
             state.isLoggedIn = true
-        },
-        logout: state => {
+            state.user = action.payload.user
+            localStorage.setItem("user", JSON.stringify(action.payload.user))
+        }),
+        logout: create.reducer(state => {
             state.isLoggedIn = false
-        },
-    },
+            state.user = null
+            localStorage.removeItem("user")
+        })
+    })
+
 })
 
 export const { login, logout } = authSlice.actions
