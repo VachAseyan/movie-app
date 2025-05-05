@@ -1,13 +1,13 @@
-import { Card, Typography, Rate, Space, theme, Button } from 'antd';
-import { CalendarOutlined, HeartOutlined, StarOutlined } from '@ant-design/icons';
+
+import { Card, Typography, Rate, Space, theme } from 'antd';
+import { CalendarOutlined, StarOutlined } from '@ant-design/icons';
 import { getImageUrl } from '../../api';
 
 const { Text } = Typography;
 const { useToken } = theme;
 
-const FilmCard = ({ movie, onMovieClick }) => {
+const PopularMovieCard = ({ movie, onMovieClick }) => {
     const { token } = useToken();
-
     return (
         <div onClick={() => onMovieClick(movie.id)} style={{ cursor: "pointer" }}>
             <Card
@@ -17,22 +17,18 @@ const FilmCard = ({ movie, onMovieClick }) => {
                         alt={movie.title}
                         src={getImageUrl(movie.poster_path)}
                         style={{
-                            height: '400px',
+                            height: 'auto'  ,
                             objectFit: 'cover',
                             background: token.colorBgContainer
                         }}
                     />
                 }
-                style={{
-                    background: token.colorBgElevated,
-                    borderColor: token.colorBorderSecondary
-                }}
             >
                 <Card.Meta
                     title={
                         <Text style={{
                             color: token.colorTextHeading,
-                            fontSize: '16px',
+                            fontSize: '25px',
                             fontWeight: 500
                         }}>
                             {movie.title}
@@ -41,7 +37,6 @@ const FilmCard = ({ movie, onMovieClick }) => {
                     description={
                         <Space direction="vertical" size="small">
                             <Space>
-                                <StarOutlined style={{ color: token.colorWarning }} />
                                 <Rate
                                     disabled
                                     defaultValue={movie.vote_average / 2}
@@ -57,24 +52,9 @@ const FilmCard = ({ movie, onMovieClick }) => {
                         </Space>
                     }
                 />
-                <div style={{ textAlign: 'right', marginTop: '12px' }}>
-                    <HeartOutlined
-                        style={{
-                            color: token.colorPrimary,
-                            fontSize: '25px',
-                            cursor: 'pointer',
-                            transition: 'color 0.3s ease'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = '#ff4d4f'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = token.colorPrimary}
-                        
-                    />
-                </div>
-
             </Card>
         </div>
-    );
-};
+    )
+}
 
-export default FilmCard;
-
+export default PopularMovieCard;

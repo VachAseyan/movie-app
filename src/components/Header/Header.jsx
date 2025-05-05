@@ -16,13 +16,13 @@ const AppHeader = () => {
     };
 
     return (
-        <AntHeader style={{ 
+        <AntHeader style={{
             height: '80px',
-            display: 'flex', 
-            alignItems: 'center', 
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'space-between',
             padding: '0 32px',
-            background: 'linear-gradient(135deg, #1a1b2d 0%, #2d3250 100%)',
+            background: 'rgba(255, 255, 255, 0.1)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
             position: 'sticky',
@@ -30,23 +30,27 @@ const AppHeader = () => {
             zIndex: 1000,
             backdropFilter: 'blur(10px)'
         }}>
-            <div style={{ 
-                fontSize: '32px', 
-                fontWeight: '800',
-                background: 'linear-gradient(90deg, #FFD700, #FFA500)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-            }}>
+            <div onClick={() => navigate('/page/1')}
+                style={{
+
+                    fontSize: '32px',
+                    fontWeight: '800',
+                    background: 'linear-gradient(90deg, #FFD700, #FFA500)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+
+                }}>
                 Movie App
             </div>
 
             <Menu
                 mode="horizontal"
-                style={{ 
-                    flex: 1, 
-                    justifyContent: 'center', 
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
                     border: 'none',
                     background: 'transparent',
                     margin: '0 24px'
@@ -55,7 +59,7 @@ const AppHeader = () => {
                     {
                         key: 'home',
                         icon: <HomeOutlined style={{ fontSize: '18px' }} />,
-                        label: <NavLink 
+                        label: <NavLink
                             to="/"
                             style={({ isActive }) => ({
                                 color: isActive ? '#FFD700' : 'rgba(255, 255, 255, 0.85)',
@@ -69,7 +73,7 @@ const AppHeader = () => {
                     {
                         key: 'favorites',
                         icon: <HeartOutlined style={{ fontSize: '18px' }} />,
-                        label: <NavLink 
+                        label: <NavLink
                             to="/favorites"
                             style={({ isActive }) => ({
                                 color: isActive ? '#FFD700' : 'rgba(255, 255, 255, 0.85)',
@@ -88,11 +92,11 @@ const AppHeader = () => {
                 alignItems: 'center',
                 gap: '16px'
             }}>
-                <Button 
-                    type="text" 
+                <Button
+                    type="text"
                     icon={<LogoutOutlined />}
                     onClick={handleLogout}
-                    style={{ 
+                    style={{
                         color: 'rgba(255, 255, 255, 0.85)',
                         fontSize: '16px',
                         display: 'flex',

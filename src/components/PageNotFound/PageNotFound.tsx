@@ -6,39 +6,37 @@ const { Text } = Typography;
 const NotFoundPage = () => {
     const navigate = useNavigate();
 
-    const handleGoHome = () => {
-        navigate('/home'); // Navigate to home page
-    };
-
-    const handleGoBack = () => {
-        navigate(-1); // Go back to previous page in history
-    };
-
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-            padding: '24px'
-        }}>
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                background: '#0d1117',
+                padding: '24px',
+            }}
+        >
             <Result
                 status="404"
                 title={
-                    <Text style={{
-                        fontSize: '48px',
-                        fontWeight: 600,
-                        color: '#1a1b2d'
-                    }}>
+                    <Text
+                        style={{
+                            fontSize: '48px',
+                            fontWeight: 700,
+                            color: '#ffffff',
+                        }}
+                    >
                         404
                     </Text>
                 }
                 subTitle={
-                    <Text style={{
-                        fontSize: '20px',
-                        color: '#2d3250'
-                    }}>
+                    <Text
+                        style={{
+                            fontSize: '20px',
+                            color: '#8b949e',
+                        }}
+                    >
                         Oops! The page you're looking for doesn't exist.
                     </Text>
                 }
@@ -47,32 +45,34 @@ const NotFoundPage = () => {
                         <Button
                             type="primary"
                             size="large"
-                            onClick={handleGoHome}
+                            onClick={() => navigate('/')}
                             style={{
                                 height: '48px',
                                 padding: '0 32px',
                                 borderRadius: '8px',
                                 fontWeight: 500,
-                                background: '#1890ff',
+                                background: '#1f6feb',
                                 border: 'none',
-                                boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
-                                transition: 'all 0.3s'
+                                color: '#fff',
+                                boxShadow: '0 4px 12px rgba(31, 111, 235, 0.4)',
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = '#40a9ff'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = '#1890ff'}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = '#388bfd')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = '#1f6feb')}
                         >
                             Return Home
                         </Button>
                         <Button
                             type="default"
                             size="large"
-                            onClick={handleGoBack}
+                            onClick={() => navigate(-1)}
                             style={{
                                 height: '48px',
                                 padding: '0 32px',
                                 borderRadius: '8px',
                                 fontWeight: 500,
-                                transition: 'all 0.3s'
+                                background: '#21262d',
+                                color: '#c9d1d9',
+                                border: '1px solid #30363d',
                             }}
                         >
                             Go Back
@@ -82,8 +82,8 @@ const NotFoundPage = () => {
                 style={{
                     padding: '40px',
                     borderRadius: '12px',
-                    background: '#fff',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)'
+                    background: '#161b22', // card background
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4)',
                 }}
             />
         </div>

@@ -5,6 +5,7 @@ import MainLayout from "./components/Layout/Layout";
 import Favorites from "./components/Favorites/Favorites";
 import HomePage from "./components/HomePage/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
 
 export const router = createBrowserRouter([
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />
   },
   {
     path: "/",
@@ -29,17 +34,15 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute><HomePage /></ProtectedRoute>
       },
       {
-        path: "movie/:movieId",
+        path: "movies/:movieId",
         element: <ProtectedRoute><MovieDetails /></ProtectedRoute>
       },
       {
         path: "favorites",
         element: <ProtectedRoute><Favorites /></ProtectedRoute>
       },
-      {
-        path:"*",
-        element: <h1>404 Not Found</h1>
-      }
-    ]
+
+    ],
+
   },
 ]);
