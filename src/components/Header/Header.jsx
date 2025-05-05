@@ -2,18 +2,21 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Layout, Menu, Button, theme, Avatar } from 'antd';
 import { HomeOutlined, HeartOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { logout } from "../../features/auth/authSlice";
 const { Header: AntHeader } = Layout;
 
 const AppHeader = () => {
     const navigate = useNavigate();
+    const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
     const handleLogout = () => {
         dispatch(logout());
         navigate('/login');
     };
+
+    const avatarLetter = user?.email?.[0]?.toUpperCase();
 
     return (
         <AntHeader style={{
@@ -92,13 +95,26 @@ const AppHeader = () => {
                 alignItems: 'center',
                 gap: '16px'
             }}>
+                <Avatar
+                    style={{
+                        backgroundColor: '#FFD700',
+                        color: '#000',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        width: '40px',
+                        height: '40px'
+                    }}
+                >
+                    {avatarLetter}
+                </Avatar>
+
                 <Button
                     type="text"
                     icon={<LogoutOutlined />}
                     onClick={handleLogout}
                     style={{
                         color: 'rgba(255, 255, 255, 0.85)',
-                        fontSize: '16px',
+                        fontSize: '18px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',

@@ -37,9 +37,10 @@ const RegisterPage = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = async (data: FormData) => {
+    const onSubmit = async (data: any) => {
+        const { email, password } = data;
         try {
-            await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await createUserWithEmailAndPassword(auth, email, password);
             messageApi.success('Successfully Register in!');
             reset();
             setTimeout(() => navigate("/login"), 1000);

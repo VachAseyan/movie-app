@@ -1,14 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { counterSlice } from '../features/counter/counterSlice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { authSlice } from '../features/auth/authSlice';
-import favoritesReducer from '../features/favorites/favoritesSlice';
 
 export const store = configureStore({
-    reducer: {
-        counter: counterSlice.reducer,
+    reducer: combineReducers({
         auth: authSlice.reducer,
-        favorites: favoritesReducer,
-    },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

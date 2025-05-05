@@ -82,7 +82,7 @@ const NotFoundPage = () => {
                 style={{
                     padding: '40px',
                     borderRadius: '12px',
-                    background: '#161b22', // card background
+                    background: '#161b22',
                     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4)',
                 }}
             />

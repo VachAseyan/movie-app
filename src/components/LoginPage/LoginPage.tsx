@@ -15,16 +15,17 @@ const LoginPage = () => {
     const dispatch = useAppDispatch();
     const [messageApi, contextHolder] = message.useMessage();
 
-    const onFinish = async (values: { email: string; password: string }) => {
+    const onFinish = async (values) => {
+        const { email, password } = values;
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-            if (userCredential.user ) {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            if (userCredential.user) {
                 dispatch(login({ user: userCredential.user }));
                 messageApi.success('Successfully logged in!');
                 setTimeout(() => navigate('/'), 2000);
             }
         } catch (error: any) {
-            messageApi.error('Failed to login. Please try again.');
+            messageApi.error('User not found');
         }
     };
 

@@ -27,7 +27,7 @@ const HomePage = () => {
     useEffect(() => {
         if (pageId) {
             const parsed = Number(pageId);
-            if (isNaN(parsed)) {
+            if (isNaN(parsed) || parsed > 50 || parsed < 1) {
                 navigate("*");
             } else {
                 setCurrentPage(parsed);
@@ -90,7 +90,7 @@ const HomePage = () => {
             </div>
 
             <div style={{ padding: '24px', maxWidth: '1440px', margin: '0 auto' }}>
-                <Title level={2} style={{ marginBottom: '24px', color: 'white', fontWeight: '600' }}>Popular Movies</Title>
+                <Title level={2} style={{ marginBottom: '24px', color: 'white', fontWeight: '600' }}>Top Rated Movies</Title>
                 <Carousel
                     autoplay
                     autoplaySpeed={3000}

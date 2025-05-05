@@ -3,7 +3,7 @@ const API_KEY =
 
 const BASE_URL = "https://api.themoviedb.org/3/discover/movie?language=en-US&page=";
 
-const TOP_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=5";
+const TOP_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
 
 const IMAGE_BASE_URL = "https://media.themoviedb.org/t/p/w440_and_h660_face";
 
