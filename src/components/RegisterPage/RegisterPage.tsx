@@ -8,7 +8,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
-
 const { Title, Text } = Typography;
 
 const schema = yup.object().shape({

@@ -64,7 +64,8 @@ const NotFoundPage = () => {
                         <Button
                             type="default"
                             size="large"
-                            onClick={() => navigate(-1)}
+
+                            onClick={() => navigate(-2)}
                             style={{
                                 height: '48px',
                                 padding: '0 32px',

@@ -9,7 +9,7 @@ const { Title, Paragraph, Text } = Typography;
 const MovieDetails = () => {
     const { movieId } = useParams();
     const navigate = useNavigate();
-    const [movie, setMovie] = useState(null);
+    const [movie, setMovie] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const MovieDetails = () => {
         <div style={{ padding: "24px" }}>
             <Button
                 icon={<ArrowLeftOutlined />}
-                onClick={() => navigate("/")}
+                onClick={() => navigate(-1)}
                 style={{ marginBottom: "24px" }}
             >
                 Back to Movies

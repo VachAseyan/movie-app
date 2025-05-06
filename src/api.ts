@@ -7,6 +7,37 @@ const TOP_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?language=en-
 
 const IMAGE_BASE_URL = "https://media.themoviedb.org/t/p/w440_and_h660_face";
 
+const SEARCH_MOVIE_URL = "https://api.themoviedb.org/3/search/movie"
+
+const MOVIE_DETAILS_URL = "https://api.themoviedb.org/3/movie/"
+
+const searchMovie = async (query: string) => {
+    try {
+        const response = await fetch(
+            `${SEARCH_MOVIE_URL}?query=${query}&include_adult=false&language=en-US&page=${page}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${API_KEY}`,
+                    Accept: "application/json",
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch search movies");
+        }
+
+        const data = await response.json();
+        return data.results;
+    } catch (error) {
+        console.error("Error fetching search movies:", error);
+        return [];
+    }
+};
+
+
+
 const getImageUrl = (path: string) => {
     return `${IMAGE_BASE_URL}${path}`;
 };
@@ -41,7 +72,7 @@ const getAllMovies = async (page) => {
 const getMovieDetails = async (movieId) => {
     try {
         const response = await fetch(
-            `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
+            `${MOVIE_DETAILS_URL}${movieId}?language=en-US`,
             {
                 method: "GET",
                 headers: {
@@ -74,7 +105,7 @@ const getPopularMovies = async () => {
                     Accept: "application/json",
                 },
             }
-        );  
+        );
 
         if (!response.ok) {
             throw new Error("Failed to fetch popular movies");
@@ -91,4 +122,4 @@ const getPopularMovies = async () => {
 
 
 
-export { getAllMovies, getImageUrl, getMovieDetails, getPopularMovies };
+export { getAllMovies, getImageUrl, getMovieDetails, getPopularMovies, searchMovie };
