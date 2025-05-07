@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 32px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     position: sticky;
@@ -22,6 +22,11 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .menu {
@@ -45,18 +50,89 @@
     font-size: 18px;
     width: 40px;
     height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.logoutButton {
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 24px;
+}
+
+.searchInput {
+    width: 250px;
+    border-radius: 20px;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.searchInput:hover,
+.searchInput:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #FFD700;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+}
+
+.searchInput::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.searchButton {
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    padding: 0 20px;
+    height: 36px;
+    transition: all 0.3s ease;
+}
+
+.searchButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    color: white;
+}
+
+.avatarDropdown {
+    background-color: #FFD700;
+    color: #000;
+    font-weight: bold;
+}
+
+.dropdownButton {
     color: rgba(255, 255, 255, 0.85);
-    font-size: 18px;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    height: auto;
     display: flex;
     align-items: center;
     gap: 8px;
     transition: all 0.3s ease;
 }
 
-.logoutButton:hover {
+.dropdownButton:hover {
     color: #FFD700 !important;
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(255, 215, 0, 0.1) !important;
 }

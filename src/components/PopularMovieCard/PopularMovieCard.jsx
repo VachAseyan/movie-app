@@ -28,7 +28,7 @@ const PopularMovieCard = ({ movie, onMovieClick }) => {
                     title={
                         <Text style={{
                             color: token.colorTextHeading,
-                            fontSize: '25px',
+                            fontSize: '18px',
                             fontWeight: 500
                         }}>
                             {movie.title}

@@ -7,6 +7,7 @@ import HomePage from "./components/HomePage/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import MovieDetails from "./components/MovieDetails/MovieDetails";
+import SearchMovies from "./components/SearchMovies/SearchMovies";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
         path: "favorites",
         element: <ProtectedRoute><Favorites /></ProtectedRoute>
       },
+      {
+        path: "search/:searchQuery/page/:pageId",
+        element: <ProtectedRoute><SearchMovies /></ProtectedRoute>
+      }
 
     ],
 

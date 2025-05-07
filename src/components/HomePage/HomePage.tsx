@@ -5,7 +5,7 @@ import { auth } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import FilmCard from "../FilmCard/FilmCard";
 import PopularMovieCard from "../PopularMovieCard/PopularMovieCard";
-
+import { useAppSelector } from "../../app/hooks";
 const { Title } = Typography;
 
 const HomePage = () => {
@@ -15,6 +15,9 @@ const HomePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const { pageId } = useParams();
     const navigate = useNavigate();
+    const isSearching = useAppSelector(state => state.search.isSearching);
+    const searchQuery = useAppSelector(state => state.search.searchQuery);
+
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -27,7 +30,9 @@ const HomePage = () => {
 
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        window.scrollTo({
+            top: 0,
+        });
     }, [currentPage]);
 
 
@@ -87,15 +92,19 @@ const HomePage = () => {
                     padding: '20px'
                 }}
             >
-                <div>
-                    <>
+                {isSearching ? (
+                    <div>
+                        <h1>Searching for {searchQuery}</h1>
+                    </div>
+                ) : (
+                    <div>
                         <div style={{ padding: '24px', maxWidth: '1440px', margin: '0 auto' }}>
                             <Title level={2} style={{ marginBottom: '24px', color: 'white', fontWeight: '600' }}>Top Rated Movies</Title>
                             <Carousel
                                 autoplay
                                 autoplaySpeed={3000}
                                 dots
-                                slidesToShow={4}
+                                slidesToShow={6}
                                 slidesToScroll={1}
                                 infinite
                                 style={{ paddingBottom: '40px' }}
@@ -137,8 +146,8 @@ const HomePage = () => {
                                 />
                             </div>
                         </div>
-                    </>
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

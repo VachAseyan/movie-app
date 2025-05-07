@@ -87,7 +87,7 @@ const LoginPage = () => {
                             <Input
                                 prefix={<UserOutlined style={{ color: '#8c8c8c' }} />}
                                 placeholder="Email"
-                                size="larxge"
+                                size="large"
                                 style={{
                                     backgroundColor: "#141414",
                                     color: "#ffffff",

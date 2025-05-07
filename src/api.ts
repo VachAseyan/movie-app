@@ -7,14 +7,14 @@ const TOP_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?language=en-
 
 const IMAGE_BASE_URL = "https://media.themoviedb.org/t/p/w440_and_h660_face";
 
-const SEARCH_MOVIE_URL = "https://api.themoviedb.org/3/search/movie"
-
 const MOVIE_DETAILS_URL = "https://api.themoviedb.org/3/movie/"
 
-const searchMovie = async (query: string) => {
+const SEARCH_MOVIE_URL = "https://api.themoviedb.org/3/search/movie";
+
+const searchMovie = async (query: string, page: number) => {
     try {
         const response = await fetch(
-            `${SEARCH_MOVIE_URL}?query=${query}&include_adult=false&language=en-US&page=${page}`,
+            `${SEARCH_MOVIE_URL}?query=${query}&page=${page}`,
             {
                 method: "GET",
                 headers: {
@@ -29,20 +29,24 @@ const searchMovie = async (query: string) => {
         }
 
         const data = await response.json();
-        return data.results;
+        return {
+            results: data.results,
+            totalResults: data.total_results,
+        }
     } catch (error) {
         console.error("Error fetching search movies:", error);
-        return [];
+        return {
+            results: [],
+            totalResults: 0,
+        }
     }
 };
-
-
 
 const getImageUrl = (path: string) => {
     return `${IMAGE_BASE_URL}${path}`;
 };
 
-const getAllMovies = async (page) => {
+const getAllMovies = async (page: number) => {
     try {
         const response = await fetch(
             `${BASE_URL}${page}`,
@@ -68,8 +72,7 @@ const getAllMovies = async (page) => {
 };
 
 
-
-const getMovieDetails = async (movieId) => {
+const getMovieDetails = async (movieId: number) => {
     try {
         const response = await fetch(
             `${MOVIE_DETAILS_URL}${movieId}?language=en-US`,

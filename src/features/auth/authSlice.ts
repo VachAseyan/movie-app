@@ -19,7 +19,7 @@ const authSlice = createAppSlice({
             state.isLoggedIn = false
             state.user = null
             localStorage.removeItem("user")
-        })
+        }),
     })
 
 })
