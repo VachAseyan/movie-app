@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { searchMovie } from "../../api";
 import { useEffect, useState } from "react";
-import { Col, Row, Pagination, Typography, Spin, Button, Result } from "antd";  // Import Result from Ant Design
+import { Col, Row, Pagination, Typography, Spin, Button, Result, message } from "antd";  // Import Result from Ant Design
 import FilmCard from "../FilmCard/FilmCard";
 
 const { Title } = Typography;
@@ -13,6 +13,7 @@ const SearchMovies = () => {
     const [totalResults, setTotalResults] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const { searchQuery, pageId } = useParams();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -22,7 +23,7 @@ const SearchMovies = () => {
     useEffect(() => {
         if (pageId) {
             const parsed = Number(pageId);
-            if (isNaN(parsed) || parsed > 100 || parsed < 1) {
+            if (isNaN(parsed) || parsed > 500 || parsed < 1) {
                 navigate("*");
             } else {
                 setCurrentPage(parsed);
@@ -60,6 +61,7 @@ const SearchMovies = () => {
 
     return (
         <div>
+            {contextHolder}
             {movies.length === 0 ? (
                 <div style={{ textAlign: 'center', paddingTop: '50px' }}>
                     <Result
@@ -79,7 +81,7 @@ const SearchMovies = () => {
                     <Row gutter={[24, 24]}>
                         {movies.map((movie) => (
                             <Col xs={24} sm={12} md={8} lg={6} key={movie.id}>
-                                <FilmCard movie={movie} onMovieClick={handleMovieClick} />
+                                <FilmCard movie={movie} onMovieClick={handleMovieClick} messageApi={messageApi} />
                             </Col>
                         ))}
                     </Row>

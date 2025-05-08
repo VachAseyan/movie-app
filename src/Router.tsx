@@ -45,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: "search/:searchQuery/page/:pageId",
         element: <ProtectedRoute><SearchMovies /></ProtectedRoute>
+      },
+      {
+        path:"favorites/page/:pageId",
+        element: <ProtectedRoute><Favorites /></ProtectedRoute>
       }
 
     ],

@@ -6,6 +6,7 @@ import { login } from '../../features/auth/authSlice';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect } from 'react';
+import { setUserId } from '../../features/favorites/favoritesSlice';
 
 const { Title, Text } = Typography;
 
@@ -21,6 +22,7 @@ const LoginPage = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (userCredential.user) {
                 dispatch(login({ user: userCredential.user }));
+                dispatch(setUserId(userCredential.user.uid));
                 messageApi.success('Successfully logged in!');
                 setTimeout(() => navigate('/'), 2000);
             }
