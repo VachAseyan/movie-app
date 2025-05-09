@@ -1,5 +1,6 @@
 import { createAppSlice } from "../../app/createAppSlice"
 
+
 const initialState = {
     isLoggedIn: localStorage.getItem("user") ? true : false,
     user: JSON.parse(localStorage.getItem("user") || "null"),

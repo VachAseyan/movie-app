@@ -9,7 +9,7 @@ const PopularMovieCard = ({ movie, onMovieClick }) => {
     const { token } = useToken();
 
     const getBorderColor = (rating) => {
-        if (rating >= 9) return '#52c41a';      // Green
+        if (rating >= 9) return '#52c41a'; 
         if (rating >= 7) return '#faad14';      // Yellow
         return '#ff4d4f';                       // Red
     };
