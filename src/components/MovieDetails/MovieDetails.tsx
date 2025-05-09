@@ -40,6 +40,13 @@ const MovieDetails = () => {
     const isFavorite = movie && favorites.some((fav) => fav.id === movie.id);
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+        });
+
+    }, [movieId])
+
+    useEffect(() => {
         const parsedId = Number(movieId);
         if (isNaN(parsedId)) {
             navigate("*");
@@ -77,8 +84,6 @@ const MovieDetails = () => {
             setCast(data.cast);
         });
     }, [movieId]);
-
-
 
     const handleClick = () => {
         if (!movie) return;
@@ -243,34 +248,37 @@ const MovieDetails = () => {
                         </div>
                     </Col>
 
-                    <Title level={3} className={styles.castTitle}>
-                        Casts
-                    </Title>
+                    {cast.length > 0 && (<>
+                        <Title level={3} className={styles.castTitle}>
+                            Casts
+                        </Title>
 
-                    <Row gutter={[24, 32]} className={styles.castGrid}>
-                        {cast
-                            .filter((actor) => actor.profile_path)
-                            .slice(0, 12)
-                            .map((actor) => (
-                                <Col xs={24} sm={12} md={8} lg={6} xl={4} key={actor.id}>
-                                    <div className={styles.castCard}>
-                                        <img
-                                            src={`https://www.themoviedb.org/t/p/w276_and_h350_face${actor.profile_path}`}
-                                            alt={actor.name}
-                                            className={styles.castImage}
-                                        />
-                                        <div className={styles.castInfo}>
-                                            <Text strong className={styles.castName}>
-                                                {actor.name}
-                                            </Text>
-                                            <Text className={styles.castCharacter}>
-                                                {actor.character}
-                                            </Text>
+                        <Row gutter={[24, 32]} className={styles.castGrid}>
+                            {cast
+                                .filter((actor) => actor.profile_path)
+                                .slice(0, 12)
+                                .map((actor) => (
+                                    <Col xs={24} sm={12} md={8} lg={6} xl={4} key={actor.id}>
+                                        <div className={styles.castCard}>
+                                            <img
+                                                src={`https://www.themoviedb.org/t/p/w276_and_h350_face${actor.profile_path}`}
+                                                alt={actor.name}
+                                                className={styles.castImage}
+                                            />
+                                            <div className={styles.castInfo}>
+                                                <Text strong className={styles.castName}>
+                                                    {actor.name}
+                                                </Text>
+                                                <Text className={styles.castCharacter}>
+                                                    {actor.character}
+                                                </Text>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Col>
-                            ))}
-                    </Row>
+                                    </Col>
+                                ))}
+                        </Row>
+                    </>
+                    )}
                 </Row>
             </Card>
         </div>

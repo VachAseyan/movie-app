@@ -67,7 +67,7 @@ const AppHeader = () => {
         <AntHeader className={styles.header}>
             {contextHolder}
             <div onClick={() => navigate('/page/1')} className={styles.logo}>
-                Movie App
+                KinoMan
             </div>
 
             <Menu
