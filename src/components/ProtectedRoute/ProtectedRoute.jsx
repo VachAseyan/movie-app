@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children }) => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const location = useLocation();
 

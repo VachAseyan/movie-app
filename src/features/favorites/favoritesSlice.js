@@ -19,7 +19,7 @@ const favoritesSlice = createSlice({
             state.favorites = getUserFavorites(action.payload);
         },
         addFavorite: (state, action) => {
-            const found = state.favorites.find((movie: any) => movie.id === action.payload.id);
+            const found = state.favorites.find((movie) => movie.id === action.payload.id);
             if (!found) {
                 state.favorites.push(action.payload);
                 localStorage.setItem(`favorites_${state.userID}`, JSON.stringify(state.favorites));
@@ -27,7 +27,7 @@ const favoritesSlice = createSlice({
         },
         removeFavorite: (state, action) => {
             state.favorites = state.favorites.filter(
-                (movie: any) => movie.id !== action.payload
+                (movie) => movie.id !== action.payload
             );
             localStorage.setItem(`favorites_${state.userID}`, JSON.stringify(state.favorites));
         },

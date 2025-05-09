@@ -26,7 +26,7 @@ const LoginPage = () => {
                 messageApi.success('Successfully logged in!');
                 setTimeout(() => navigate('/'), 2000);
             }
-        } catch (error: any) {
+        } catch (error) {
             messageApi.error('User not found');
         }
     };

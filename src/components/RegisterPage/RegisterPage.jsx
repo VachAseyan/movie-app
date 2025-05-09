@@ -36,14 +36,14 @@ const RegisterPage = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data) => {
         const { email, password } = data;
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             messageApi.success('Successfully Register in!');
             reset();
             setTimeout(() => navigate("/login"), 1000);
-        } catch (error: any) {
+        } catch (error) {
             messageApi.error("User already exists!")
         }
     };

@@ -14,7 +14,7 @@ const Favorites = ({ }) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const handleMovieClick = (movieId: string) => {
+    const handleMovieClick = (movieId) => {
         navigate(`/movies/${movieId}`);
     };
 
@@ -38,7 +38,7 @@ const Favorites = ({ }) => {
     }, [favorites.length, currentPage, totalPages, navigate]);
 
 
-    const handlePageChange = (page: number) => {
+    const handlePageChange = (page) => {
         navigate(`/favorites/page/${page}`);
     };
 

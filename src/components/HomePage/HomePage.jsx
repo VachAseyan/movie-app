@@ -68,12 +68,12 @@ const HomePage = () => {
     console.log(movies);
     
 
-    const handlePageChange = (page: number) => {
+    const handlePageChange = (page) => {
         navigate(`/page/${page}`);
         setCurrentPage(page);
     };
 
-    const handleMovieClick = (movieId: string) => {
+    const handleMovieClick = (movieId) => {
         navigate(`/movies/${movieId}`);
     };
 
