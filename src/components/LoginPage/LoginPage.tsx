@@ -80,16 +80,14 @@ const LoginPage = () => {
                     >
                         <Form.Item
                             name="email"
-                            rules={[
-                                { required: true, message: 'Please input your email!' },
-                                { type: 'email', message: 'Please enter a valid email!' }
-                            ]}
+                            rules={[{ required: true, message: 'Please input your password!' }]}
                             style={{ marginBottom: '24px' }}
                         >
                             <Input
                                 prefix={<UserOutlined style={{ color: '#8c8c8c' }} />}
                                 placeholder="Email"
                                 size="large"
+                                className="dark-input"
                                 style={{
                                     backgroundColor: "#141414",
                                     color: "#ffffff",
@@ -98,8 +96,8 @@ const LoginPage = () => {
                                     height: '48px',
                                     border: '1px solid #303030'
                                 }}
-                                className="dark-input"
                             />
+
                         </Form.Item>
 
                         <Form.Item
@@ -111,6 +109,7 @@ const LoginPage = () => {
                                 prefix={<LockOutlined style={{ color: '#8c8c8c' }} />}
                                 placeholder="Password"
                                 size="large"
+                                className="dark-input"
                                 style={{
                                     backgroundColor: "#141414",
                                     color: "#ffffff",
@@ -119,7 +118,6 @@ const LoginPage = () => {
                                     height: '48px',
                                     border: '1px solid #303030'
                                 }}
-                                className="dark-input"
                             />
                         </Form.Item>
 

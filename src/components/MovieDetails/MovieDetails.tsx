@@ -1,28 +1,43 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Spin, Typography, Button, Card, Row, Col, Rate, Space, message, Tag, Progress } from "antd";
-import { getImageUrl, getMovieDetails } from "../../api";
+import {
+    Spin,
+    Typography,
+    Button,
+    Card,
+    Row,
+    Col,
+    Space,
+    message,
+    Tag,
+    Progress,
+} from "antd";
 import {
     ArrowLeftOutlined,
     CalendarOutlined,
     ClockCircleOutlined,
     HeartOutlined,
-    HeartFilled
+    HeartFilled,
 } from "@ant-design/icons";
+import { getImageUrl, getMovieCast, getMovieDetails, getVideo } from "../../api";
 import { addFavorite, removeFavorite } from "../../features/favorites/favoritesSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import styles from "./MovieDetails.module.css";
 
 const { Title, Paragraph, Text } = Typography;
 
 const MovieDetails = () => {
     const { movieId } = useParams();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const [cast, setCast] = useState([])
     const [movie, setMovie] = useState([]);
+    const [videoKey, setVideoKey] = useState(null);
     const [loading, setLoading] = useState(true);
     const [messageApi, contextHolder] = message.useMessage();
-    const dispatch = useAppDispatch();
+
     const favorites = useAppSelector((state) => state.favorites.favorites);
-    const isFavorite = favorites.some((favorite) => favorite.id === movie.id);
+    const isFavorite = movie && favorites.some((fav) => fav.id === movie.id);
 
     useEffect(() => {
         const parsedId = Number(movieId);
@@ -30,46 +45,66 @@ const MovieDetails = () => {
             navigate("*");
             return;
         }
-        setTimeout(() => {
-            getMovieDetails(parsedId)
-                .then((data) => {
-                    if (!data) {
-                        navigate("*");
-                    } else {
-                        setMovie(data);
-                    }
-                })
-                .catch(() => navigate("*"))
-                .finally(() => setLoading(false));
-        }, 1000);
-    }, []);
+
+        setLoading(true);
+
+        getMovieDetails(parsedId)
+            .then((data) => {
+                if (!data) {
+                    navigate("*");
+                } else {
+                    setMovie(data);
+                }
+            })
+            .catch(() => navigate("*"))
+            .finally(() => setLoading(false));
+    }, [movieId, navigate]);
+
+
+    useEffect(() => {
+        getVideo(movieId)
+            .then((data) => {
+                const key = data?.results?.[0]?.key;
+                if (key) {
+                    setVideoKey(key);
+                }
+            })
+            .catch(() => navigate("*"));
+    }, [movieId, navigate]);
+
+    useEffect(() => {
+        getMovieCast(movieId).then((data) => {
+            setCast(data.cast);
+        });
+    }, [movieId]);
+
+
 
     const handleClick = () => {
+        if (!movie) return;
+
         if (isFavorite) {
             dispatch(removeFavorite(movie.id));
             messageApi.open({
-                type: 'warning',
+                type: "warning",
                 content: `${movie.title} removed from favorites`,
             });
         } else {
             dispatch(addFavorite(movie));
             messageApi.open({
-                type: 'success',
+                type: "success",
                 content: `${movie.title} added to favorites`,
             });
         }
-    }
-
+    };
 
     if (loading) {
         return (
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                background: "linear-gradient(to bottom, #141414, #1f1f1f)"
-            }}>
+            <div
+                className={
+                    styles.loadingContainer
+                }
+            >
                 <Spin size="large" />
             </div>
         );
@@ -78,161 +113,164 @@ const MovieDetails = () => {
     if (!movie) return null;
 
     return (
-        <div>
+        <div
+            className={styles.container}
+            style={{
+                backgroundImage: `url(${getImageUrl(movie.backdrop_path)})`
+            }}
+        >
             {contextHolder}
             <Button
                 icon={<ArrowLeftOutlined />}
                 onClick={() => navigate(-1)}
+                className={styles.backButton}
             >
                 Back to Movies
             </Button>
 
-
-            <Card
-                bordered={false}
-            >
+            <Card bordered={false} className={styles.card}>
                 <Row gutter={[32, 32]}>
-                    <Col xs={24} md={10}>
-                        <div style={{ position: "relative" }}>
+                    <Col xs={24} md={8} lg={6}>
+                        {movie.poster_path ? (
                             <img
                                 src={getImageUrl(movie.poster_path)}
                                 alt={movie.title}
-                                style={{
-                                    width: "100%",
-                                    borderRadius: "12px",
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                                }}
+                                className={styles.poster}
                             />
-                        </div>
+                        ) : (
+                            <div className={styles.noPoster}>
+                                No image available
+                            </div>
+                        )}
                     </Col>
 
-                    <Col xs={24} md={14}>
-                        <Space direction="vertical" size="large" style={{ width: "100%" }} >
-                            <Title level={2} style={{
-                                marginBottom: 0,
-                                fontSize: "45px",
-                                color: "#fff",
-                                textShadow: "0 2px 4px rgba(0,0,0,0.3)"
-                            }}>
+                    <Col xs={24} md={8} lg={9}>
+                        <Space direction="vertical" size="large" style={{ width: "100%" }}>
+                            <Title level={2} className={styles.movieTitle}>
                                 {movie.title}
                             </Title>
+                            {movie.original_title !== movie.title && (
+                                <Title level={2} className={styles.originalTitle}>
+                                    ({movie.original_title})
+                                </Title>
+                            )}
 
-                            <Space size="large" style={{ marginTop: 12 }}>
+                            <Space size="large" wrap>
                                 <Space>
-                                    <CalendarOutlined style={{ color: "#1890ff" }} />
-                                    <Text style={{
-                                        fontSize: "18px",
-                                        color: "#fff"
-                                    }}>
+                                    <CalendarOutlined className={styles.icon} />
+                                    <Text className={styles.infoText}>
                                         {movie.release_date}
                                     </Text>
                                 </Space>
                                 <Space>
-                                    <ClockCircleOutlined style={{ color: "#1890ff" }} />
-                                    <Text style={{
-                                        fontSize: "18px",
-                                        color: "#fff"
-                                    }}>
+                                    <ClockCircleOutlined className={styles.icon} />
+                                    <Text className={styles.infoText}>
                                         {movie.runtime} min
                                     </Text>
                                 </Space>
                             </Space>
 
-                            <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-                                    <Progress
-                                        type="circle"
-                                        percent={Math.round(movie.vote_average * 10)}
-                                        width={80}
-                                        strokeColor={
-                                            "#FFD700"
-                                        }
-                                        format={(percent) => `${percent}%`}
-                                    />
-                                    <div>
-                                        <Text strong style={{ fontSize: "18px", color: "#fff" }}>User Score</Text>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "4px" }}>
-                                            <Rate
-                                                disabled
-                                                allowHalf
-                                                value={movie.vote_average / 2}
-                                                style={{ fontSize: "16px" }}
-                                            />
-                                            <Text style={{
-                                                fontSize: "16px",
-                                                color: "#ffd700"
-                                            }}>
-                                                {movie.vote_average.toFixed(1)}
-                                            </Text>
-                                        </div>
-                                    </div>
+                            <div className={styles.scoreContainer}>
+                                <Progress
+                                    type="circle"
+                                    percent={Math.round(movie.vote_average * 10)}
+                                    width={80}
+                                    strokeColor={movie.vote_average > 7 ? "#4CAF50" : "#FFC107"}
+                                    trailColor="rgba(255, 255, 255, 0.1)"
+                                    format={(percent) => (
+                                        <span className={styles.scoreText}>{percent}%</span>
+                                    )}
+                                />
+                                <div>
+                                    <Text strong className={styles.scoreLabel}>
+                                        User Score
+                                    </Text>
                                 </div>
+                            </div>
 
-                                <Paragraph style={{
-                                    fontSize: "18px",
-                                    color: "#fff",
-                                    lineHeight: "1.6"
-                                }}>
-                                    {movie.overview}
-                                </Paragraph>
+                            <Paragraph className={styles.overview}>
+                                {movie.overview}
+                            </Paragraph>
 
-                                {movie.genres && (
-                                    <Space direction="vertical" size="small">
-                                        <Text strong style={{
-                                            fontSize: "20px",
-                                            color: "#fff"
-                                        }}>
-                                            Genres
-                                        </Text>
-                                        <Space size={[8, 8]} wrap>
-                                            {movie.genres.map(genre => (
-                                                <Tag
-                                                    key={genre.id}
-                                                    style={{
-                                                        background: "#FFD700",
-                                                        color: "black",
-                                                        border: "none",
-                                                        padding: "4px 12px",
-                                                        borderRadius: "16px",
-                                                        fontSize: "14px"
-                                                    }}
-                                                >
-                                                    {genre.name}
-                                                </Tag>
-                                            ))}
-                                        </Space>
+                            {movie.genres && (
+                                <Space direction="vertical">
+                                    <Text strong className={styles.genreTitle}>
+                                        Genres
+                                    </Text>
+                                    <Space wrap>
+                                        {movie.genres.map((genre) => (
+                                            <Tag
+                                                key={genre.id}
+                                                className={styles.genreTag}
+                                            >
+                                                {genre.name}
+                                            </Tag>
+                                        ))}
                                     </Space>
-                                )}
-                            </Space>
+                                </Space>
+                            )}
 
                             <Button
                                 icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
                                 onClick={handleClick}
                                 size="large"
-                                style={{
-                                    marginTop: "24px",
-                                    height: "50px",
-                                    borderRadius: "24px",
-                                    fontSize: "18px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "8px",
-                                    width: "200px",
-                                    border: "none",
-                                    color: "#fff"
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.opacity = "0.9";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.opacity = "1";
-                                }}
+                                className={`${styles.favoriteButton} ${isFavorite ? styles.added : styles.notAdded
+                                    }`}
                             >
                                 {isFavorite ? "Remove Favorite" : "Add to Favorites"}
                             </Button>
                         </Space>
                     </Col>
+
+                    <Col xs={24} md={8} lg={9}>
+                        <div className={styles.trailerSection}>
+                            <Title level={3} className={styles.trailerTitle}>
+                                Trailer
+                            </Title>
+                            {videoKey ? (
+                                <div className={styles.trailerContainer}>
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${videoKey}`}
+                                        title="Movie Trailer"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className={styles.trailerIframe}
+                                    ></iframe>
+                                </div>
+                            ) : (
+                                <Text className={styles.noTrailer}>No trailer available</Text>
+                            )}
+                        </div>
+                    </Col>
+
+                    <Title level={3} className={styles.castTitle}>
+                        Casts
+                    </Title>
+
+                    <Row gutter={[24, 32]} className={styles.castGrid}>
+                        {cast
+                            .filter((actor) => actor.profile_path)
+                            .slice(0, 12)
+                            .map((actor) => (
+                                <Col xs={24} sm={12} md={8} lg={6} xl={4} key={actor.id}>
+                                    <div className={styles.castCard}>
+                                        <img
+                                            src={`https://www.themoviedb.org/t/p/w276_and_h350_face${actor.profile_path}`}
+                                            alt={actor.name}
+                                            className={styles.castImage}
+                                        />
+                                        <div className={styles.castInfo}>
+                                            <Text strong className={styles.castName}>
+                                                {actor.name}
+                                            </Text>
+                                            <Text className={styles.castCharacter}>
+                                                {actor.character}
+                                            </Text>
+                                        </div>
+                                    </div>
+                                </Col>
+                            ))}
+                    </Row>
                 </Row>
             </Card>
         </div>

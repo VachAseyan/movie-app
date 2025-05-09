@@ -1,29 +1,42 @@
-import { Pagination, Row, Col, Typography, message, Empty } from "antd";
+import { Pagination, Row, Col, Typography, message, Empty, Spin } from "antd";
 import { useAppSelector } from "../../app/hooks";
 import FilmCard from "../FilmCard/FilmCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeartOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const Favorites = ({ onMovieClick = () => { } }) => {
+const Favorites = ({ }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const favorites = useAppSelector((state) => state.favorites.favorites);
     const { pageId } = useParams();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
+    const handleMovieClick = (movieId: string) => {
+        navigate(`/movies/${movieId}`);
+    };
 
     const pageSize = 20;
     const currentPage = Number(pageId) || 1;
     const totalPages = Math.ceil(favorites.length / pageSize);
 
     useEffect(() => {
-        if (currentPage > totalPages && totalPages > 0) {
-            navigate(`/favorites/page/${totalPages}`, { replace: true });
-        } else if (currentPage > 1 && favorites.length === 0) {
-            navigate("/favorites", { replace: true });
-        }
+        setLoading(true);
+
+        const timeout = setTimeout(() => {
+            if (currentPage > totalPages && totalPages > 0) {
+                navigate(`/favorites/page/${totalPages}`);
+            } else if (currentPage > 1 && favorites.length === 0) {
+                navigate("/favorites");
+            }
+            setLoading(false);
+        }, 300);
+
+        return () => clearTimeout(timeout);
     }, [favorites.length, currentPage, totalPages, navigate]);
+
 
     const handlePageChange = (page: number) => {
         navigate(`/favorites/page/${page}`);
@@ -32,6 +45,14 @@ const Favorites = ({ onMovieClick = () => { } }) => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const currentFavorites = favorites.slice(startIndex, endIndex);
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Spin size="large" />
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -112,7 +133,7 @@ const Favorites = ({ onMovieClick = () => { } }) => {
                             >
                                 <FilmCard
                                     movie={movie}
-                                    onMovieClick={onMovieClick}
+                                    onMovieClick={handleMovieClick}
                                     messageApi={messageApi}
                                 />
                             </Col>

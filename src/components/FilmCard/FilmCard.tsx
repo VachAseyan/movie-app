@@ -34,15 +34,33 @@ const FilmCard = ({ movie, onMovieClick, messageApi }) => {
             <Card
                 hoverable
                 cover={
-                    <img
-                        alt={movie.title}
-                        src={getImageUrl(movie.poster_path)}
-                        style={{
-                            height: '400px',
-                            objectFit: 'cover',
-                            background: token.colorBgContainer
-                        }}
-                    />
+                    movie.poster_path ? (
+                        <img
+                            alt={movie.title}
+                            src={getImageUrl(movie.poster_path)}
+                            style={{
+                                height: '400px',
+                                objectFit: 'cover',
+                                background: token.colorBgContainer
+                            }}
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                height: '400px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: token.colorBgContainer,
+                                color: token.colorTextSecondary,
+                                fontSize: '18px',
+                                fontWeight: 500,
+                                textAlign: 'center'
+                            }}
+                        >
+                            No Image Available
+                        </div>
+                    )
                 }
                 style={{
                     background: token.colorBgElevated,
@@ -67,7 +85,10 @@ const FilmCard = ({ movie, onMovieClick, messageApi }) => {
                                     disabled
                                     defaultValue={movie.vote_average / 2}
                                     allowHalf
-                                    style={{ fontSize: '14px' }}
+                                    style={{
+                                        fontSize: '14px'
+
+                                    }}
                                 />
                                 <Text type="secondary">({movie.vote_average.toFixed(1)})</Text>
                             </Space>

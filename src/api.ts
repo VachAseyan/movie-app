@@ -5,11 +5,41 @@ const BASE_URL = "https://api.themoviedb.org/3/discover/movie?language=en-US&pag
 
 const TOP_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
 
-const IMAGE_BASE_URL = "https://media.themoviedb.org/t/p/w440_and_h660_face";
+const IMAGE_BASE_URL = "https://media.themoviedb.org/t/p/original";
 
 const MOVIE_DETAILS_URL = "https://api.themoviedb.org/3/movie/"
 
 const SEARCH_MOVIE_URL = "https://api.themoviedb.org/3/search/movie";
+
+const VIDEO_URL = `https://api.themoviedb.org/3/movie`;
+
+const getVideo = async (movieId: string) => {
+    return fetch(
+        `${VIDEO_URL}/${movieId}/videos`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                Accept: "application/json",
+            },
+        }
+    ).then(response => response.json())
+};
+
+const getMovieCast = async (movieId) => {
+
+    return fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}/credits`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                Accept: "application/json",
+            },
+        }
+    ).then(res => res.json())
+};
+
 
 const searchMovie = async (query: string, page: number) => {
     try {
@@ -125,4 +155,4 @@ const getPopularMovies = async () => {
 
 
 
-export { getAllMovies, getImageUrl, getMovieDetails, getPopularMovies, searchMovie };
+export { getAllMovies, getImageUrl, getMovieDetails, getPopularMovies, searchMovie, getVideo, getMovieCast };

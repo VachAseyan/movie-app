@@ -1,4 +1,3 @@
-// src/layout/MainLayout.js
 import { Outlet } from "react-router-dom";
 import { Layout, theme } from 'antd';  
 import AppHeader from "../Header/Header";
@@ -9,14 +8,13 @@ const MainLayout = () => {
     const { token } = theme.useToken();
 
     return (
-        <Layout style={{ minHeight: '100vh', background: token.colorBgContainer }}>
+        <Layout style={{ minHeight: '100vh', background: token.colorBgContainer }}> 
             <AppHeader />
             <Content style={{
-                margin: '24px 16px',
                 padding: 24,
                 background: token.colorBgElevated,
                 borderRadius: token.borderRadiusLG,
-                minHeight: 280
+                minHeight: 280  
             }}>
                 <Outlet />
             </Content>
