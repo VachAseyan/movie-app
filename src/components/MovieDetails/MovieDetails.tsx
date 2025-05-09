@@ -121,6 +121,8 @@ const MovieDetails = () => {
         <div
             className={styles.container}
             style={{
+                backgroundSize: "cover",
+                backgroundPosition: "center",
                 backgroundImage: `url(${getImageUrl(movie.backdrop_path)})`
             }}
         >
