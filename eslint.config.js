@@ -4,11 +4,9 @@ import prettierConfig from "eslint-config-prettier/flat"
 import reactPlugin from "eslint-plugin-react"
 import reactHooksPlugin from "eslint-plugin-react-hooks"
 import globals from "globals"
-import { config, configs } from "typescript-eslint"
 
-const eslintConfig = config(
+export default [
   {
-    name: "global-ignores",
     ignores: [
       "**/*.snap",
       "**/dist/",
@@ -21,64 +19,30 @@ const eslintConfig = config(
       "**/coverage/",
     ],
   },
-  {
-    name: `${js.meta.name}/recommended`,
-    ...js.configs.recommended,
-  },
-  configs.strictTypeChecked,
-  configs.stylisticTypeChecked,
+  js.configs.recommended,
   vitestPlugin.configs.recommended,
+  reactPlugin.configs["recommended"],
+  reactHooksPlugin.configs["recommended"],
   {
-    name: "eslint-plugin-react/jsx-runtime",
-    ...reactPlugin.configs.flat["jsx-runtime"],
-  },
-  reactHooksPlugin.configs["recommended-latest"],
-  {
-    name: "main",
     linterOptions: {
-      reportUnusedDisableDirectives: 2,
+      reportUnusedDisableDirectives: "error",
     },
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+      sourceType: "module",
+      globals: {
+        ...globals.browser
       },
     },
     settings: {
-      vitest: {
-        typecheck: true,
-      },
+      react: {
+        version: "detect"
+      }
     },
     rules: {
-      "no-undef": [0],
-      "@typescript-eslint/consistent-type-definitions": [2, "type"],
-      "@typescript-eslint/consistent-type-imports": [
-        2,
-        {
-          prefer: "type-imports",
-          fixStyle: "separate-type-imports",
-          disallowTypeAnnotations: true,
-        },
-      ],
-      "no-restricted-imports": [
-        2,
-        {
-          paths: [
-            {
-              name: "react-redux",
-              importNames: ["useSelector", "useStore", "useDispatch"],
-              message:
-                "Please use pre-typed versions from `src/app/hooks.ts` instead.",
-            },
-          ],
-        },
-      ],
-    },
+      "no-unused-vars": "warn",
+      "no-console": "warn"
+    }
   },
-
-  prettierConfig,
-)
-
-export default eslintConfig
+  prettierConfig
+]
