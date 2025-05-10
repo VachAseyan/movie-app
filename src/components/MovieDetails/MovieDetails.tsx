@@ -19,32 +19,73 @@ import {
     HeartOutlined,
     HeartFilled,
 } from "@ant-design/icons";
-import { getImageUrl, getMovieCast, getMovieDetails, getVideo } from "../../api";
-import { addFavorite, removeFavorite } from "../../features/favorites/favoritesSlice";
+import {
+    getImageUrl,
+    getMovieCast,
+    getMovieDetails,
+    getVideo,
+} from "../../api";
+import {
+    addFavorite,
+    removeFavorite,
+} from "../../features/favorites/favoritesSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import styles from "./MovieDetails.module.css";
 
 const { Title, Paragraph, Text } = Typography;
 
+export interface Genre {
+    id: number;
+    name: string;
+}
+
+export interface Movie {
+    id: number;
+    title: string;
+    original_title: string;
+    overview: string;
+    release_date: string;
+    runtime: number;
+    poster_path: string | null;
+    backdrop_path: string | null;
+    vote_average: number;
+    genres: Genre[];
+}
+
+export interface CastMember {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
+}
+
+export interface VideoResult {
+    key: string;
+    name: string;
+    site: string;
+}
+
+export interface VideoResponse {
+    results: VideoResult[];
+}
+
 const MovieDetails = () => {
-    const { movieId } = useParams();
+    const { movieId } = useParams<{ movieId: string }>();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [cast, setCast] = useState([])
-    const [movie, setMovie] = useState([]);
-    const [videoKey, setVideoKey] = useState(null);
-    const [loading, setLoading] = useState(true);
+
+    const [cast, setCast] = useState<CastMember[]>([]);
+    const [movie, setMovie] = useState<Movie | null>(null);
+    const [videoKey, setVideoKey] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const [messageApi, contextHolder] = message.useMessage();
 
     const favorites = useAppSelector((state) => state.favorites.favorites);
-    const isFavorite = movie && favorites.some((fav) => fav.id === movie.id);
+    const isFavorite = movie ? favorites.some((fav) => fav.id === movie.id) : false;
 
     useEffect(() => {
-        window.scrollTo({
-            top: 0,
-        });
-
-    }, [movieId])
+        window.scrollTo({ top: 0 });
+    }, [movieId]);
 
     useEffect(() => {
         const parsedId = Number(movieId);
@@ -55,8 +96,8 @@ const MovieDetails = () => {
 
         setLoading(true);
 
-        getMovieDetails(parsedId)
-            .then((data) => {
+        getMovieDetails(parsedId.toString())
+            .then((data: Movie | null) => {
                 if (!data) {
                     navigate("*");
                 } else {
@@ -67,10 +108,9 @@ const MovieDetails = () => {
             .finally(() => setLoading(false));
     }, [movieId, navigate]);
 
-
     useEffect(() => {
-        getVideo(movieId)
-            .then((data) => {
+        getVideo(movieId as string)
+            .then((data: VideoResponse) => {
                 const key = data?.results?.[0]?.key;
                 if (key) {
                     setVideoKey(key);
@@ -80,7 +120,7 @@ const MovieDetails = () => {
     }, [movieId, navigate]);
 
     useEffect(() => {
-        getMovieCast(movieId).then((data) => {
+        getMovieCast(movieId as string).then((data: { cast: CastMember[] }) => {
             setCast(data.cast);
         });
     }, [movieId]);
@@ -105,11 +145,7 @@ const MovieDetails = () => {
 
     if (loading) {
         return (
-            <div
-                className={
-                    styles.loadingContainer
-                }
-            >
+            <div className={styles.loadingContainer}>
                 <Spin size="large" />
             </div>
         );
@@ -121,7 +157,9 @@ const MovieDetails = () => {
         <div
             className={styles.container}
             style={{
-                backgroundImage: `url(${getImageUrl(movie.backdrop_path)})`
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundImage: `url(${getImageUrl(movie.backdrop_path || "")})`,
             }}
         >
             {contextHolder}
@@ -143,17 +181,13 @@ const MovieDetails = () => {
                                 className={styles.poster}
                             />
                         ) : (
-                            <div className={styles.noPoster}>
-                                No image available
-                            </div>
+                            <div className={styles.noPoster}>No image available</div>
                         )}
                     </Col>
 
                     <Col xs={24} md={8} lg={9}>
                         <Space direction="vertical" size="large" style={{ width: "100%" }}>
-                            <Title level={2} className={styles.movieTitle}>
-                                {movie.title}
-                            </Title>
+                            <Title level={2} className={styles.movieTitle}>{movie.title}</Title>
                             {movie.original_title !== movie.title && (
                                 <Title level={2} className={styles.originalTitle}>
                                     ({movie.original_title})
@@ -163,15 +197,11 @@ const MovieDetails = () => {
                             <Space size="large" wrap>
                                 <Space>
                                     <CalendarOutlined className={styles.icon} />
-                                    <Text className={styles.infoText}>
-                                        {movie.release_date}
-                                    </Text>
+                                    <Text className={styles.infoText}>{movie.release_date}</Text>
                                 </Space>
                                 <Space>
                                     <ClockCircleOutlined className={styles.icon} />
-                                    <Text className={styles.infoText}>
-                                        {movie.runtime} min
-                                    </Text>
+                                    <Text className={styles.infoText}>{movie.runtime} min</Text>
                                 </Space>
                             </Space>
 
@@ -186,28 +216,17 @@ const MovieDetails = () => {
                                         <span className={styles.scoreText}>{percent}%</span>
                                     )}
                                 />
-                                <div>
-                                    <Text strong className={styles.scoreLabel}>
-                                        User Score
-                                    </Text>
-                                </div>
+                                <Text strong className={styles.scoreLabel}>User Score</Text>
                             </div>
 
-                            <Paragraph className={styles.overview}>
-                                {movie.overview}
-                            </Paragraph>
+                            <Paragraph className={styles.overview}>{movie.overview}</Paragraph>
 
                             {movie.genres && (
                                 <Space direction="vertical">
-                                    <Text strong className={styles.genreTitle}>
-                                        Genres
-                                    </Text>
+                                    <Text strong className={styles.genreTitle}>Genres</Text>
                                     <Space wrap>
                                         {movie.genres.map((genre) => (
-                                            <Tag
-                                                key={genre.id}
-                                                className={styles.genreTag}
-                                            >
+                                            <Tag key={genre.id} className={styles.genreTag}>
                                                 {genre.name}
                                             </Tag>
                                         ))}
@@ -219,8 +238,7 @@ const MovieDetails = () => {
                                 icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
                                 onClick={handleClick}
                                 size="large"
-                                className={`${styles.favoriteButton} ${isFavorite ? styles.added : styles.notAdded
-                                    }`}
+                                className={`${styles.favoriteButton} ${isFavorite ? styles.added : styles.notAdded}`}
                             >
                                 {isFavorite ? "Remove Favorite" : "Add to Favorites"}
                             </Button>
@@ -229,9 +247,7 @@ const MovieDetails = () => {
 
                     <Col xs={24} md={8} lg={9}>
                         <div className={styles.trailerSection}>
-                            <Title level={3} className={styles.trailerTitle}>
-                                Trailer
-                            </Title>
+                            <Title level={3} className={styles.trailerTitle}>Trailer</Title>
                             {videoKey ? (
                                 <div className={styles.trailerContainer}>
                                     <iframe
@@ -240,7 +256,7 @@ const MovieDetails = () => {
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen
                                         className={styles.trailerIframe}
-                                    ></iframe>
+                                    />
                                 </div>
                             ) : (
                                 <Text className={styles.noTrailer}>No trailer available</Text>
@@ -248,36 +264,34 @@ const MovieDetails = () => {
                         </div>
                     </Col>
 
-                    {cast.length > 0 && (<>
-                        <Title level={3} className={styles.castTitle}>
-                            Casts
-                        </Title>
-
-                        <Row gutter={[24, 32]} className={styles.castGrid}>
-                            {cast
-                                .filter((actor) => actor.profile_path)
-                                .slice(0, 12)
-                                .map((actor) => (
-                                    <Col xs={24} sm={12} md={8} lg={6} xl={4} key={actor.id}>
-                                        <div className={styles.castCard}>
-                                            <img
-                                                src={`https://www.themoviedb.org/t/p/w276_and_h350_face${actor.profile_path}`}
-                                                alt={actor.name}
-                                                className={styles.castImage}
-                                            />
-                                            <div className={styles.castInfo}>
-                                                <Text strong className={styles.castName}>
-                                                    {actor.name}
-                                                </Text>
-                                                <Text className={styles.castCharacter}>
-                                                    {actor.character}
-                                                </Text>
+                    {cast.length > 0 && (
+                        <>
+                            <Title level={3} className={styles.castTitle}>Casts</Title>
+                            <Row gutter={[24, 32]} className={styles.castGrid}>
+                                {cast
+                                    .filter((actor) => actor.profile_path)
+                                    .slice(0, 12)
+                                    .map((actor) => (
+                                        <Col xs={24} sm={12} md={8} lg={6} xl={4} key={actor.id}>
+                                            <div className={styles.castCard}>
+                                                <img
+                                                    src={`https://www.themoviedb.org/t/p/w276_and_h350_face${actor.profile_path}`}
+                                                    alt={actor.name}
+                                                    className={styles.castImage}
+                                                />
+                                                <div className={styles.castInfo}>
+                                                    <Text strong className={styles.castName}>
+                                                        {actor.name}
+                                                    </Text>
+                                                    <Text className={styles.castCharacter}>
+                                                        {actor.character}
+                                                    </Text>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Col>
-                                ))}
-                        </Row>
-                    </>
+                                        </Col>
+                                    ))}
+                            </Row>
+                        </>
                     )}
                 </Row>
             </Card>

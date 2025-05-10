@@ -9,17 +9,25 @@ import { useAppSelector } from "../../app/hooks";
 import banner from "../../assets/banner.png";
 const { Title } = Typography;
 
-const HomePage = () => {
-    const [movies, setMovies] = useState([]);
-    const [popularMovies, setPopularMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const { pageId } = useParams();
+interface Movie {
+    id: number;
+    title: string;
+    poster_path: string;
+    overview: string;
+    release_date: string;
+    vote_average: number;
+}
+
+const HomePage: React.FC = () => {
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const { pageId } = useParams<{ pageId: string }>();
     const navigate = useNavigate();
     const isSearching = useAppSelector(state => state.search.isSearching);
     const searchQuery = useAppSelector(state => state.search.searchQuery);
     const [messageApi, contextHolder] = message.useMessage();
-
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -30,18 +38,16 @@ const HomePage = () => {
         return () => unsubscribe();
     }, [navigate]);
 
-
     useEffect(() => {
         window.scrollTo({
             top: 0,
         });
     }, [currentPage]);
 
-
     useEffect(() => {
         if (pageId) {
             const parsed = Number(pageId);
-            if (isNaN(parsed) || parsed > 100 || parsed < 1) {
+            if (isNaN(parsed) || parsed > 500 || parsed < 1) {
                 navigate("*");
             } else {
                 setCurrentPage(parsed);
@@ -65,15 +71,12 @@ const HomePage = () => {
         });
     }, [currentPage]);
 
-    console.log(movies);
-    
-
-    const handlePageChange = (page) => {
+    const handlePageChange = (page: number) => {
         navigate(`/page/${page}`);
         setCurrentPage(page);
     };
 
-    const handleMovieClick = (movieId) => {
+    const handleMovieClick = (movieId: number) => {
         navigate(`/movies/${movieId}`);
     };
 
@@ -162,7 +165,7 @@ const HomePage = () => {
                             <div style={{ textAlign: 'center', marginTop: '24px' }}>
                                 <Pagination
                                     current={currentPage}
-                                    total={2000}
+                                    total={10000}
                                     pageSize={20}
                                     onChange={handlePageChange}
                                     showSizeChanger={false}

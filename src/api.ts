@@ -26,7 +26,7 @@ const getVideo = async (movieId: string) => {
     ).then(response => response.json())
 };
 
-const getMovieCast = async (movieId) => {
+const getMovieCast = async (movieId:string) => {
 
     return fetch(
         `https://api.themoviedb.org/3/movie/${movieId}/credits`,
@@ -102,7 +102,7 @@ const getAllMovies = async (page: number) => {
 };
 
 
-const getMovieDetails = async (movieId: number) => {
+const getMovieDetails = async (movieId: string) => {
     try {
         const response = await fetch(
             `${MOVIE_DETAILS_URL}${movieId}?language=en-US`,

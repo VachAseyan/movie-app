@@ -1,27 +1,46 @@
-import { createAppSlice } from "../../app/createAppSlice"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-
-const initialState = {
-    isLoggedIn: localStorage.getItem("user") ? true : false,
-    user: JSON.parse(localStorage.getItem("user") || "null"),
+interface User {
+  id: string
+  name: string
+  email: string
 }
 
-const authSlice = createAppSlice({
-    name: "auth",
-    initialState,
-    reducers: create => ({
-        login: create.reducer((state, action) => {
-            state.isLoggedIn = true
-            state.user = action.payload.user
-            localStorage.setItem("user", JSON.stringify(action.payload.user))
-        }),
-        logout: create.reducer(state => {
-            state.isLoggedIn = false
-            state.user = null
-            localStorage.removeItem("user")
-        }),
-    })
+interface AuthState {
+  isLoggedIn: boolean
+  user: User | null
+}
 
+const getUserFromStorage = (): User | null => {
+  try {
+    const user = localStorage.getItem('user')
+    return user ? JSON.parse(user) : null
+  } catch {
+    return null
+  }
+}
+
+const initialState: AuthState = {
+  isLoggedIn: !!localStorage.getItem('user'),
+  user: getUserFromStorage(),
+}
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    login(state, action: PayloadAction<{ user: User }>) {
+      const { user } = action.payload
+      localStorage.setItem('user', JSON.stringify(user))
+      state.isLoggedIn = true
+      state.user = user
+    },
+    logout(state) {
+      localStorage.removeItem('user')
+      state.isLoggedIn = false
+      state.user = null
+    },
+  },
 })
 
 export const { login, logout } = authSlice.actions
