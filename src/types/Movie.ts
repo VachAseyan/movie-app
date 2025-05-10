@@ -6,9 +6,4 @@ export interface Movie {
   release_date: string;
 }
 
-export interface FavoriteMovie {
-  id: number;
-  title: string;
-}
-
-
+export type FavoriteMovie = Movie;
