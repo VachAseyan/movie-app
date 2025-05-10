@@ -56,7 +56,13 @@ const Favorites: React.FC = () => {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentFavorites = favorites.slice(startIndex, endIndex);
+  const currentFavorites: Movie[] = favorites.slice(startIndex, endIndex).map(favorite => ({
+    ...favorite,
+    poster_path: favorite.poster_path || '',
+    vote_average: favorite.vote_average || 0,
+    release_date: favorite.release_date || ''
+  }));
+  
 
   if (loading) {
     return (
