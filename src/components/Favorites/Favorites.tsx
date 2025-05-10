@@ -13,9 +13,16 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeartOutlined } from '@ant-design/icons';
 import { RootState } from "../../app/store";
-import { Movie } from "../../app/store";
 
 const { Title } = Typography;
+
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  vote_average: number;
+  release_date: string;
+}
 
 const Favorites: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();

@@ -6,7 +6,7 @@ import FilmCard from "../FilmCard/FilmCard";
 
 const { Title } = Typography;
 
-interface Movie{
+interface Movie {
   id: number;
   title: string;
   poster_path?: string;

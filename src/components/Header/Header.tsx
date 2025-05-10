@@ -26,7 +26,7 @@ const AppHeader: React.FC = () => {
     setSearchQuery("")
   }
 
-  const handleLogout = (e?: MouseEvent): void => {
+  const handleLogout = (_e?: MouseEvent): void => {
     dispatch(logout())
     navigate("/login")
   }

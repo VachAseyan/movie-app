@@ -1,4 +1,4 @@
-import { Card, Typography, Rate, Space, theme, Button, message } from 'antd';
+import { Card, Typography, Rate, Space, theme, Button } from 'antd';
 import { CalendarOutlined, DeleteOutlined, HeartOutlined, StarOutlined } from '@ant-design/icons';
 import { getImageUrl } from '../../api';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
