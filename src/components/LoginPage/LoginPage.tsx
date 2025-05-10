@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { login } from '../../features/auth/authSlice';
 import { auth } from '../../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
 import { useEffect } from 'react';
 import { setUserId } from '../../features/favorites/favoritesSlice';
 
@@ -15,8 +15,21 @@ interface LoginFormValues {
   password: string;
 }
 
+interface AuthState {
+  isLoggedIn: boolean;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+}
+
+interface RootState {
+  auth: AuthState;
+}
+
 const LoginPage: React.FC = () => {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useAppSelector((state: RootState) => state.auth.isLoggedIn);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -24,9 +37,15 @@ const LoginPage: React.FC = () => {
   const onFinish = async (values: LoginFormValues) => {
     const { email, password } = values;
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
       if (userCredential.user) {
-        dispatch(login({ user: { id: userCredential.user.uid, name: userCredential.user.displayName || 'Unknown', email: userCredential.user.email || '' } }));
+        dispatch(login({ 
+          user: { 
+            id: userCredential.user.uid, 
+            name: userCredential.user.displayName || 'Unknown', 
+            email: userCredential.user.email || '' 
+          } 
+        }));
         dispatch(setUserId(userCredential.user.uid));
         messageApi.success('Successfully logged in!');
         setTimeout(() => navigate('/'), 2000);
