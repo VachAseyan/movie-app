@@ -14,13 +14,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HeartOutlined } from '@ant-design/icons';
 import { RootState } from "../../app/store";
 import { Movie } from '../../types/Movie';
-
+import { FavoriteMovie } from '../../types/Movie';
 const { Title } = Typography;
 
 
 const Favorites: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const favorites: Movie[] = useAppSelector(
+  const favorites: FavoriteMovie[] = useAppSelector(
     (state: RootState) => state.favorites.favorites
   );
 
