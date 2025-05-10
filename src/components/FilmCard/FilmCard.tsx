@@ -7,14 +7,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 
 const { Text } = Typography;
 const { useToken } = theme;
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-  vote_average: number;
-  release_date: string;
-}
+import { Movie } from '../../types/Movie';
 
 interface FilmCardProps {
   movie: Movie;

@@ -3,15 +3,9 @@ import { searchMovie } from "../../api";
 import { useEffect, useState } from "react";
 import { Col, Row, Pagination, Typography, Spin, Button, Result, message } from "antd";
 import FilmCard from "../FilmCard/FilmCard";
+import { Movie } from '../../types/Movie';
 
 const { Title } = Typography;
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path?: string;
-  overview?: string;
-}
 
 
 interface RouteParams extends Record<string, string | undefined> {
