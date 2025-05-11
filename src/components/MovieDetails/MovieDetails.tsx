@@ -90,7 +90,7 @@ const MovieDetails = () => {
     useEffect(() => {
         const parsedId = Number(movieId);
         if (isNaN(parsedId)) {
-            navigate("*");
+            navigate("/*");
             return;
         }
 
@@ -99,12 +99,12 @@ const MovieDetails = () => {
         getMovieDetails(parsedId.toString())
             .then((data: Movie | null) => {
                 if (!data) {
-                    navigate("*");
+                    navigate("/*");
                 } else {
                     setMovie(data);
                 }
             })
-            .catch(() => navigate("*"))
+            .catch(() => navigate("/*"))
             .finally(() => setLoading(false));
     }, [movieId, navigate]);
 

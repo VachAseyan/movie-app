@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "*",
+    path: "/*",
     element: <PageNotFound />
   },
   {

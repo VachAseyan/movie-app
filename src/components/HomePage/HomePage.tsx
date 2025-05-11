@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
         if (pageId) {
             const parsed = Number(pageId);
             if (isNaN(parsed) || parsed > 500 || parsed < 1) {
-                navigate("*");
+                navigate("/*");
             } else {
                 setCurrentPage(parsed);
             }

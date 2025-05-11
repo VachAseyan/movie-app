@@ -30,7 +30,7 @@ const SearchMovies = () => {
   useEffect(() => {
     const parsed = Number(pageId);
     if (isNaN(parsed) || parsed < 1 || parsed > 500) {
-      navigate("*");
+      navigate("/*");
     } else {
       setCurrentPage(parsed);
     }
