@@ -116,7 +116,7 @@ const MovieDetails = () => {
                     setVideoKey(key);
                 }
             })
-            .catch(() => navigate("*"));
+            .catch(() => navigate("/*"));
     }, [movieId, navigate]);
 
     useEffect(() => {

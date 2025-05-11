@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
             setMovies(data);
             setLoading(false);
         });
-    }, [currentPage]);
+    }, []);
 
     const handlePageChange = (page: number) => {
         navigate(`/page/${page}`);
@@ -155,7 +155,7 @@ const HomePage: React.FC = () => {
                         <div style={{ padding: '24px' }}>
                             <Title level={2} style={{ marginBottom: '24px' }}>All Movies</Title>
                             <Row gutter={[24, 24]}>
-                                {movies.map((movie) => (
+                                {movies.length && movies.map((movie) => (
                                     <Col xs={24} sm={12} md={8} lg={6} key={movie.id}>
                                         <FilmCard movie={movie} onMovieClick={handleMovieClick} messageApi={messageApi} />
                                     </Col>
