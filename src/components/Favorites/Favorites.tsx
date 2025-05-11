@@ -86,7 +86,6 @@ const Favorites: React.FC = () => {
   return (
     <div>
       {contextHolder}
-
       {favorites.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}

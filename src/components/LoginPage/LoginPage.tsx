@@ -26,7 +26,8 @@ const LoginPage: React.FC = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       if (userCredential.user) {
-        dispatch(login({ user: { id: userCredential.user.uid, name: userCredential.user.displayName || 'Unknown', email: userCredential.user.email || '' } }));
+        console.log("login success", userCredential.user);
+        dispatch(login({ user: userCredential.user }));
         dispatch(setUserId(userCredential.user.uid));
         messageApi.success('Successfully logged in!');
         setTimeout(() => navigate('/'), 2000);
