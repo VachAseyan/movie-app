@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-interface User {
-  id: string
-  name: string
-  email: string
-}
+import {User} from 'firebase/auth'
 
 interface AuthState {
   isLoggedIn: boolean
@@ -12,12 +7,8 @@ interface AuthState {
 }
 
 const getUserFromStorage = (): User | null => {
-  try {
     const user = localStorage.getItem('user')
     return user ? JSON.parse(user) : null
-  } catch {
-    return null
-  }
 }
 
 const initialState: AuthState = {
@@ -29,7 +20,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<{ user: User }>) {
+    login(state, action: PayloadAction<{ user: User | null }>) {
       const { user } = action.payload
       localStorage.setItem('user', JSON.stringify(user))
       state.isLoggedIn = true

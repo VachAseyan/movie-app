@@ -8,7 +8,7 @@ const { darkAlgorithm } = theme;
 
 export const App = () => {
   return (
-    
+
     <ConfigProvider
       theme={{
         algorithm: darkAlgorithm,

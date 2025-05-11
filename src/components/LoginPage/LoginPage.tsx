@@ -21,27 +21,29 @@ const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = async (values: LoginFormValues) => {
-    const { email, password } = values;
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (userCredential.user) {
-        console.log("login success", userCredential.user);
-        dispatch(login({ user: userCredential.user }));
-        dispatch(setUserId(userCredential.user.uid));
-        messageApi.success('Successfully logged in!');
-        setTimeout(() => navigate('/'), 2000);
-      }
-    } catch (error: unknown) {
-      messageApi.error('User not found');
-    }
-  };
-
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/');
     }
   }, [isLoggedIn, navigate]);
+
+  const onFinish = async (values: LoginFormValues) => {
+    const { email, password } = values;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (userCredential.user) {
+        dispatch(login({ user: userCredential.user }));
+        dispatch(setUserId(userCredential.user.uid));
+        console.log('works')
+        messageApi.success('Login Successful').then(() => {
+          navigate('/')
+        });
+
+      }
+    } catch (error: unknown) {
+      messageApi.error('User not found');
+    }
+  };
 
   return (
     <div
