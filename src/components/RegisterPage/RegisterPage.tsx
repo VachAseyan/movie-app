@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
+import background from "../../assets/movie-background-collage.jpg"
 
 const { Title, Text } = Typography;
 
@@ -69,7 +70,19 @@ const RegisterPage: React.FC = () => {
     }, [isLoggedIn, navigate]);
 
     return (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#141414", padding: "20px" }}>
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                padding: '20px',
+                backgroundImage: `url(${background})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'brightness(0.8) contrast(1) saturate(1)',
+            }}
+        >
             {contextHolder}
             <Card
                 style={{ width: "100%", maxWidth: "450px", borderRadius: "12px", boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)", border: "none", overflow: "hidden", background: "#1f1f1f" }}
@@ -96,7 +109,7 @@ const RegisterPage: React.FC = () => {
                                         style={{
                                             backgroundColor: "#141414",
                                             color: "#ffffff",
-                                            borderRadius: "6px",
+                                            borderRadius: "15px",
                                             padding: "10px 15px",
                                             height: "48px",
                                             border: "1px solid #303030"
@@ -119,7 +132,7 @@ const RegisterPage: React.FC = () => {
                                         style={{
                                             backgroundColor: "#141414",
                                             color: "#ffffff",
-                                            borderRadius: "6px",
+                                            borderRadius: "15px",
                                             padding: "10px 15px",
                                             height: "48px",
                                             border: "1px solid #303030"
@@ -142,7 +155,7 @@ const RegisterPage: React.FC = () => {
                                         style={{
                                             backgroundColor: "#141414",
                                             color: "#ffffff",
-                                            borderRadius: "6px",
+                                            borderRadius: "15px",
                                             padding: "10px 15px",
                                             height: "48px",
                                             border: "1px solid #303030"

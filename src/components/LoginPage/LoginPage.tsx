@@ -7,6 +7,7 @@ import { auth } from '../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect } from 'react';
 import { setUserId } from '../../features/favorites/favoritesSlice';
+import background from "../../assets/movie-background-collage.jpg";
 
 const { Title, Text } = Typography;
 
@@ -52,8 +53,11 @@ const LoginPage: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        background: '#141414',
-        padding: '20px'
+        padding: '20px',
+        backgroundImage: `url(${background})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'brightness(0.8) contrast(1) saturate(1)',
       }}
     >
       {contextHolder}
@@ -97,11 +101,10 @@ const LoginPage: React.FC = () => {
                 prefix={<UserOutlined style={{ color: '#8c8c8c' }} />}
                 placeholder="Email"
                 size="large"
-                className="dark-input"
                 style={{
                   backgroundColor: '#141414',
                   color: '#ffffff',
-                  borderRadius: '6px',
+                  borderRadius: '15px',
                   padding: '10px 15px',
                   height: '48px',
                   border: '1px solid #303030'
@@ -122,7 +125,7 @@ const LoginPage: React.FC = () => {
                 style={{
                   backgroundColor: '#141414',
                   color: '#ffffff',
-                  borderRadius: '6px',
+                  borderRadius: '15px',
                   padding: '10px 15px',
                   height: '48px',
                   border: '1px solid #303030'

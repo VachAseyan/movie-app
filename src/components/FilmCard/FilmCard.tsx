@@ -21,7 +21,8 @@ const FilmCard: React.FC<FilmCardProps> = ({ movie, onMovieClick, messageApi }) 
   const favorites = useAppSelector((state) => state.favorites.favorites);
   const isFavorite = favorites.some((favorite) => favorite.id === movie.id);
 
-  const handleClick = () => {
+  const handleClick = (e:React.MouseEvent) => {
+    e.stopPropagation();
     if (isFavorite) {
       dispatch(removeFavorite(movie.id));
       messageApi.open({
@@ -106,7 +107,7 @@ const FilmCard: React.FC<FilmCardProps> = ({ movie, onMovieClick, messageApi }) 
             </Space>
           }
         />
-        <div style={{ textAlign: 'center', marginTop: '16px' }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ textAlign: 'center', marginTop: '16px' }}>
           {isFavorite ? (
             <Button
               type="primary"
