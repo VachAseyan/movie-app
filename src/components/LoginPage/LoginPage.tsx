@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
     if (isLoggedIn) {
       navigate('/');
     }
-  }, [isLoggedIn, navigate]);
+  }, []);
 
   const onFinish = async (values: LoginFormValues) => {
     const { email, password } = values;
